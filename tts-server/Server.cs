@@ -37,6 +37,9 @@ namespace tts_server
 
             NetworkStream stream = client.GetStream();
 
+            // Spin up game
+            Game game = new Game();
+
             while (true)
             {
                 while (!stream.DataAvailable) ;
@@ -100,6 +103,7 @@ namespace tts_server
                             decoded[i] = (byte)(bytes[offset + i] ^ masks[i % 4]);
 
                         string text = Encoding.UTF8.GetString(decoded);
+                        
                         Console.WriteLine("{0}", text);
                     }
                     else
