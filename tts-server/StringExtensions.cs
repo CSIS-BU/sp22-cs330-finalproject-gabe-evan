@@ -6,7 +6,6 @@ namespace tts_server
     // https://stackoverflow.com/a/4133475/3957465
     static class StringExtensions
     {
-
         public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
         {
             if (s == null)

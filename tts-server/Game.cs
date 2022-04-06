@@ -9,13 +9,13 @@ namespace tts_server
             public int row, col;
         };
 
-        private readonly static char player = 'x', opponent = 'o';
+        public readonly static int player = 0, opponent = 1;
 
-        private char[,] _board = {{ 'x', 'o', 'x' },
-                                  { '_', 'o', 'x' },
-                                  { '_', '_', '_' }};
+        private int[,] _board = {{ -1, -1, -1 },
+                                 { -1, -1, -1 },
+                                 { -1, -1, -1 }};
 
-        public char[,] Board
+        public int[,] Board
         {
             get { return _board; }
         }
@@ -23,33 +23,13 @@ namespace tts_server
         public bool Finished
         { get; set; }
 
-        private readonly bool solo;
-
-        public Game(bool solo = true)
-        {
-            this.solo = solo;
-        }
-
-        public void placeTic(int row, int col)
+        public void placeTic(int who, int row, int col)
         {
             if(isLegalMove(row, col))
-                _board[row, col] = 'x';
+                _board[row, col] = who;
             else
                 throw new InvalidMoveException(row, col);
         }
-
-      /*  public Game()
-        {
-
-            
-               char[,] board = {{ 'x', 'x', 'x' },
-                                 { 'o', 'o', 'x' },
-                                 { '_', '_', '_' }};
-     Move bestMove = findBestMove(board);
-
-              Console.Write("The Optimal Move is :\n");
-              Console.Write("ROW: {0} COL: {1}\n\n", bestMove.row, bestMove.col);
-        }*/
 
         // This function returns true if there are moves
         // remaining on the board. It returns false if
@@ -58,14 +38,14 @@ namespace tts_server
         {
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
-                    if (_board[i, j] == '_')
+                    if (_board[i, j] == -1)
                         return true;
             return false;
         }
 
         public bool isLegalMove(int row, int col)
         {
-            return _board[row, col] == '_';
+            return _board[row, col] == -1;
         }
 
         // This is the evaluation function as discussed
@@ -153,7 +133,7 @@ namespace tts_server
                     for (int j = 0; j < 3; j++)
                     {
                         // Check if cell is empty
-                        if (_board[i, j] == '_')
+                        if (_board[i, j] == -1)
                         {
                             // Make the move
                             _board[i, j] = player;
@@ -163,7 +143,7 @@ namespace tts_server
                             best = Math.Max(best, minimax(depth + 1, !isMax));
 
                             // Undo the move
-                            _board[i, j] = '_';
+                            _board[i, j] = -1;
                         }
                     }
                 }
@@ -181,7 +161,7 @@ namespace tts_server
                     for (int j = 0; j < 3; j++)
                     {
                         // Check if cell is empty
-                        if (_board[i, j] == '_')
+                        if (_board[i, j] == -1)
                         {
                             // Make the move
                             _board[i, j] = opponent;
@@ -191,7 +171,7 @@ namespace tts_server
                             best = Math.Min(best, minimax(depth + 1, !isMax));
 
                             // Undo the move
-                            _board[i, j] = '_';
+                            _board[i, j] = -1;
                         }
                     }
                 }
@@ -201,7 +181,7 @@ namespace tts_server
 
         // This will return the best possible
         // move for the player
-        Move findBestMove()
+        public Move findBestMove()
         {
             int bestVal = -1000;
             Move bestMove = new Move();
@@ -216,7 +196,7 @@ namespace tts_server
                 for (int j = 0; j < 3; j++)
                 {
                     // Check if cell is empty
-                    if (_board[i, j] == '_')
+                    if (_board[i, j] == -1)
                     {
                         // Make the move
                         _board[i, j] = player;
@@ -226,7 +206,7 @@ namespace tts_server
                         int moveVal = minimax(0, false);
 
                         // Undo the move
-                        _board[i, j] = '_';
+                        _board[i, j] = -1;
 
                         // If the value of the current move is
                         // more than the best value, then update

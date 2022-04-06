@@ -10,10 +10,7 @@ export class AppComponent implements OnInit {
   constructor(private ttsService: TtsService) {
   }
 
-
   ngOnInit() {
     this.ttsService.connect();
-
-    this.ttsService.send("howdy howdy")
   }
 }

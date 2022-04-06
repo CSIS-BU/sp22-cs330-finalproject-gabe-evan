@@ -43,7 +43,6 @@ namespace tts_server
             // Spin up game
             Game game = new Game();
 
-
             while (true)
             {
                 while (!stream.DataAvailable) ;
@@ -177,23 +176,50 @@ namespace tts_server
 
                 if (!game.Finished)
                 {
-                    game.placeTic(move.row, move.col);
+                    game.placeTic(Game.player, move.row, move.col);
 
-                    bool playerWon = game.checkWinner('x');
-                    bool opponentWon = game.checkWinner('o');
+                    bool playerWon = game.checkWinner(Game.player);
+                    bool opponentWon = game.checkWinner(Game.opponent);
 
-                    res.finished = playerWon || opponentWon;
-                    if (res.finished) 
+                    res.finished = playerWon || opponentWon || !game.isMovesLeft();
+
+                    if (res.finished && (playerWon || opponentWon)) 
                     {
                         game.Finished = true;
                         res.won = playerWon;
                         res.message = "You " + (playerWon ? "won" : "lost");
                     }
-                    else
+                    else if (res.finished)
                     {
-                        res.message = "Play your next move";
-                    }
+                        game.Finished = true;
+                        res.won = false;
+                        res.message = "There was a tie";
+                    }else
+                    {
+                        // The "AI"'s turn
+                        Game.Move opMove = game.findBestMove();
 
+                        game.placeTic(Game.opponent, opMove.row, opMove.col);
+                        
+                        res.finished = playerWon || opponentWon || !game.isMovesLeft();
+                        
+                        if (game.checkWinner(Game.opponent))
+                        {
+                            game.Finished = true;
+                            res.won = playerWon;
+                            res.message = "You lost";
+                        }
+                        else if (!game.isMovesLeft())
+                        {
+                            game.Finished = true;
+                            res.won = false;
+                            res.message = "There was a tie";
+                        }
+                        else
+                        {
+                            res.message = "Play your next move";
+                        }
+                    }
                 }
                 else
                     throw new GameFinishedException();
@@ -202,7 +228,7 @@ namespace tts_server
             {
                 Console.WriteLine(ex.Message);
                 res.error = true;
-                res.won = game.checkWinner('x');
+                res.won = game.checkWinner(Game.player);
                 res.finished = true;
                 res.message = "Game is finished";
             }
@@ -236,7 +262,7 @@ namespace tts_server
             public string message;
             public bool won = false;
             public bool finished = false;
-            public char[,] board;
+            public int[,] board;
         }
 
         

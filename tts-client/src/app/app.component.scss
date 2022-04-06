@@ -1,0 +1,211 @@
+.game {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  margin-left: -300px;
+  margin-top: -370px;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+@media (max-width: 540px), (max-height: 630px){
+.game {
+  width: 300px;
+  height: 300px;
+  margin-left: -150px;
+  margin-top: -205px;
+}
+}
+
+@media (max-width: 630px) {
+  .game, .scores {
+    margin-left: -225px;
+  }
+}
+
+@media (max-width: 800px) {
+  .game, .scores {
+    margin-left: -150px;
+  }
+}
+
+@media (max-width: 960px), (max-height: 800px) {
+  .game {
+    width: 450px;
+    height: 450px;
+    margin-left: -225px;
+    margin-top: -280px;
+  }
+}
+
+.board{
+  height: 100%;
+  width: 100%;
+  border: 5px solid hsl(0, 0%, 7%);
+}
+
+.square {
+  float: left;
+  width: 33.333333333%;
+  height: 33.333333333%;
+  border-width: 5px;
+  border-color: hsl(0, 0%, 7%);
+  -webkit-transition: background-color .1s;
+  -moz-transition: background-color .1s;
+  transition: background-color .1s;
+  will-change: background-color,border-color;
+  cursor: pointer;
+}
+
+.square.left {
+  clear: both;
+  border-right-style: solid;
+}
+.square.top {
+  border-bottom-style: solid;
+}
+
+.square.right {
+  border-left-style: solid;
+}
+
+.square.bottom {
+  border-top-style: solid;
+}
+
+@media (max-width: 540px), (max-height: 630px) {
+  .square, .game {
+    border-width: 3px;
+  }
+}
+@media (max-width: 960px), (max-height: 800px) {
+  .square, .game {
+    border-width: 4px;
+  }
+}
+
+.board .square>div {
+  -webkit-transition: opacity .1s;
+  -moz-transition: opacity .1s;
+  transition: opacity .1s;
+}
+.square .x, .square .o {
+  position: relative;
+  will-change: transform;
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+  -webkit-animation: appear .2s cubic-bezier(0.5,1.8,0.1,1.1);
+  -moz-animation: appear .2s cubic-bezier(0.5,1.8,0.1,1.1);
+  animation: appear .2s cubic-bezier(0.5,1.8,0.1,1.1);
+}
+.x {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 540px), (max-height: 630px) {
+  .square .o {
+    border-width: 10px;
+  }
+}
+@media (max-width: 960px), (max-height: 800px) {
+  .square .o {
+    border-width: 15px;
+  }
+}
+.square .x, .square .o {
+  position: relative;
+  will-change: transform;
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+  -webkit-animation: appear .2s cubic-bezier(0.5,1.8,0.1,1.1);
+  -moz-animation: appear .2s cubic-bezier(0.5,1.8,0.1,1.1);
+  animation: appear .2s cubic-bezier(0.5,1.8,0.1,1.1);
+}
+
+.o {
+  left: 16.666666667%;
+  top: 16.666666667%;
+  width: 66.666666667%;
+  height: 66.666666667%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 20px solid hsl(0, 0%, 7%);
+}
+
+@media (max-width: 540px), (max-height: 630px) {
+  .square .x:before, .square .x:after {
+    left: 45px;
+    top: 13px;
+    width: 10px;
+    height: 74px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+  }
+}
+@media (max-width: 960px), (max-height: 800px) {
+  .square .x:before, .square .x:after {
+    left: 67.5px;
+    top: 16px;
+    width: 15px;
+    height: 118px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+  }
+}
+
+.x:before {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+@media (max-width: 540px), (max-height: 630px) {
+  .square .x:before, .square .x:after {
+    left: 45px;
+    top: 13px;
+    width: 10px;
+    height: 74px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+  }
+}
+
+@media (max-width: 960px), (max-height: 800px) {
+  .square .x:before, .square .x:after {
+    left: 67.5px;
+    top: 16px;
+    width: 15px;
+    height: 118px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+  }
+}
+.x:after {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.x:before, .x:after {
+  position: absolute;
+  content: "";
+  display: block;
+  background-color: hsl(0, 0%, 7%);
+  left: 90px;
+  top: 20px;
+  width: 20px;
+  height: 160px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
