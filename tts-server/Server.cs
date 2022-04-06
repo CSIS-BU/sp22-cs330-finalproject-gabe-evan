@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
+// https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_server
 namespace tts_server
 {
     internal class Server
@@ -40,6 +43,7 @@ namespace tts_server
             // Spin up game
             Game game = new Game();
 
+
             while (true)
             {
                 while (!stream.DataAvailable) ;
@@ -48,6 +52,7 @@ namespace tts_server
                 byte[] bytes = new byte[client.Available];
                 stream.Read(bytes, 0, client.Available);
                 string s = Encoding.UTF8.GetString(bytes);
+                string keyB64 = null;
 
                 if (Regex.IsMatch(s, "^GET", RegexOptions.IgnoreCase))
                 {
@@ -61,6 +66,7 @@ namespace tts_server
                     string swka = swk + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
                     byte[] swkaSha1 = System.Security.Cryptography.SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(swka));
                     string swkaSha1Base64 = Convert.ToBase64String(swkaSha1);
+                    keyB64 = swkaSha1Base64;
 
                     // HTTP/1.1 defines the sequence CR LF as the end-of-line marker
                     byte[] response = Encoding.UTF8.GetBytes(
@@ -104,7 +110,28 @@ namespace tts_server
 
                         string text = Encoding.UTF8.GetString(decoded);
                         
-                        Console.WriteLine("{0}", text);
+                        Console.WriteLine("Client: {0}\r\n", text);
+
+                        string responseText = ProcessStream(ref game, text);
+
+                        Console.WriteLine("Server: {0}", responseText);
+
+                        Queue<string> que = new Queue<string>(responseText.SplitInParts(125));
+                        int len = que.Count;
+
+                        // https://stackoverflow.com/questions/27021665/c-sharp-websocket-sending-message-back-to-client
+                        while (que.Count > 0)
+                        {
+                            var header = GetHeader(
+                                que.Count > 1 ? false : true,
+                                que.Count == len ? false : true
+                            );
+
+                            byte[] list = Encoding.UTF8.GetBytes(que.Dequeue());
+                            header = (header << 7) + list.Length;
+                            stream.Write(IntToByteArray((ushort)header), 0, 2);
+                            stream.Write(list, 0, list.Length);
+                        }
                     }
                     else
                     {
@@ -117,5 +144,101 @@ namespace tts_server
 
         }
 
+        private static int GetHeader(bool finalFrame, bool contFrame)
+        {
+            int header = finalFrame ? 1 : 0;//fin: 0 = more frames, 1 = final frame
+            header = (header << 1) + 0;//rsv1
+            header = (header << 1) + 0;//rsv2
+            header = (header << 1) + 0;//rsv3
+            header = (header << 4) + (contFrame ? 0 : 1);//opcode : 0 = continuation frame, 1 = text
+            header = (header << 1) + 0;//mask: server -> client = no mask
+
+            return header;
+        }
+
+        private static byte[] IntToByteArray(ushort value)
+        {
+            var ary = BitConverter.GetBytes(value);
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(ary);
+            }
+
+            return ary;
+        }
+
+        private static string ProcessStream(ref Game game, string text)
+        {
+            Response res = new Response();
+
+            try
+            {
+                Game.Move move = JsonConvert.DeserializeObject<Game.Move>(text);
+
+                if (!game.Finished)
+                {
+                    game.placeTic(move.row, move.col);
+
+                    bool playerWon = game.checkWinner('x');
+                    bool opponentWon = game.checkWinner('o');
+
+                    res.finished = playerWon || opponentWon;
+                    if (res.finished) 
+                    {
+                        game.Finished = true;
+                        res.won = playerWon;
+                        res.message = "You " + (playerWon ? "won" : "lost");
+                    }
+                    else
+                    {
+                        res.message = "Play your next move";
+                    }
+
+                }
+                else
+                    throw new GameFinishedException();
+            }
+            catch (GameFinishedException ex)
+            {
+                Console.WriteLine(ex.Message);
+                res.error = true;
+                res.won = game.checkWinner('x');
+                res.finished = true;
+                res.message = "Game is finished";
+            }
+            catch(InvalidMoveException ex)
+            {
+                Console.WriteLine(ex.Message);
+                res.error = true;
+                res.message = "Player made an invalid move";
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine(ex.Message);
+                res.error = true;
+                res.message = "Data from client could not be processed";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                res.error = true;
+                res.message = "An unknown error has occured";
+            }
+
+            res.board = game.Board;
+            
+            return JsonConvert.SerializeObject(res);
+        }
+
+        private class Response
+        {
+            public bool error = false;
+            public string message;
+            public bool won = false;
+            public bool finished = false;
+            public char[,] board;
+        }
+
+        
     }
 }

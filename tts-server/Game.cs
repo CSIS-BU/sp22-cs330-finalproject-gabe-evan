@@ -4,7 +4,7 @@ namespace tts_server
 {
     class Game
     {
-        private class Move
+        public class Move
         {
             public int row, col;
         };
@@ -14,6 +14,14 @@ namespace tts_server
         private char[,] _board = {{ 'x', 'o', 'x' },
                                   { '_', 'o', 'x' },
                                   { '_', '_', '_' }};
+
+        public char[,] Board
+        {
+            get { return _board; }
+        }
+
+        public bool Finished
+        { get; set; }
 
         private readonly bool solo;
 
@@ -235,6 +243,25 @@ namespace tts_server
 
             return bestMove;
         }
+
+        public bool checkWinner(int player)
+        {
+            // check rows
+            if (_board[0, 0] == player && _board[0, 1] == player && _board[0, 2] == player) { return true; }
+            if (_board[1, 0] == player && _board[1, 1] == player && _board[1, 2] == player) { return true; }
+            if (_board[2, 0] == player && _board[2, 1] == player && _board[2, 2] == player) { return true; }
+
+            // check columns
+            if (_board[0, 0] == player && _board[1, 0] == player && _board[2, 0] == player) { return true; }
+            if (_board[0, 1] == player && _board[1, 1] == player && _board[2, 1] == player) { return true; }
+            if (_board[0, 2] == player && _board[1, 2] == player && _board[2, 2] == player) { return true; }
+
+            // check diags
+            if (_board[0, 0] == player && _board[1, 1] == player && _board[2, 2] == player) { return true; }
+            if (_board[0, 2] == player && _board[1, 1] == player && _board[2, 0] == player) { return true; }
+
+            return false;
+        }
     }
 
     [Serializable]
@@ -244,6 +271,17 @@ namespace tts_server
 
         public InvalidMoveException(int row, int col)
             : base(String.Format("Invalid move : [{0},{1}]", row, col))
+        {
+        }
+    }
+
+    [Serializable]
+    class GameFinishedException : Exception
+    {
+        public GameFinishedException() { }
+
+        public GameFinishedException(int row, int col)
+            : base(String.Format("Game is already finished"))
         {
         }
     }
