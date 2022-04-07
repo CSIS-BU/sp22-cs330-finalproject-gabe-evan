@@ -5,31 +5,31 @@
         <div class="column is-three-fifths is-offset-one-fifth">
           <div class="box game">
             <div class="board">
-              <div class="square top left" tabindex="0">
-                <div class="x"></div>
+              <div class="square top left" (click)="placeTic(0,0)">
+<!--                <object class="x" data="assets/x.svg" type="image/svg+xml"></object>-->
               </div>
-              <div class="square top" tabindex="0">
-                <div class="o"></div>
+              <div class="square top" (click)="placeTic(0,1)">
+<!--                <object class="o" data="assets/o.svg" type="image/svg+xml"></object>-->
               </div>
-              <div class="square top right" tabindex="0">
+              <div class="square top right" (click)="placeTic(0,2)">
                 <div class=""></div>
               </div>
-              <div class="square left" tabindex="0">
+              <div class="square left" (click)="placeTic(1,0)">
                 <div class=""></div>
               </div>
-              <div class="square" tabindex="0">
+              <div class="square" (click)="placeTic(1,1)">
                 <div class=""></div>
               </div>
-              <div class="square right" tabindex="0">
+              <div class="square right" (click)="placeTic(1,2)">
                 <div class=""></div>
               </div>
-              <div class="square bottom left" tabindex="0">
+              <div class="square bottom left" (click)="placeTic(2,0)">
                 <div class=""></div>
               </div>
-              <div class="square bottom" tabindex="0">
+              <div class="square bottom" (click)="placeTic(2,1)">
                 <div class=""></div>
               </div>
-              <div class="square bottom right" tabindex="0">
+              <div class="square bottom right" (click)="placeTic(2,2)">
                 <div class=""></div>
               </div>
             </div>
