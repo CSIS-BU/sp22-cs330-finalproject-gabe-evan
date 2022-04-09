@@ -174,7 +174,13 @@ namespace tts_server
             {
                 Game.Move move = JsonConvert.DeserializeObject<Game.Move>(text);
 
-                if (!game.Finished)
+                // Request reset of board by providing a -1
+                if (move.row == -1 || move.row == -1)
+                {
+                    game.resetGame();
+                    res.message = "New game started";
+                }
+                else if (!game.Finished)
                 {
                     game.placeTic(Game.player, move.row, move.col);
 

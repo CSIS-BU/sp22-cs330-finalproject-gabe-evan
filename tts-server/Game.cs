@@ -11,9 +11,7 @@ namespace tts_server
 
         public readonly static int player = 0, opponent = 1;
 
-        private int[,] _board = {{ -1, -1, -1 },
-                                 { -1, -1, -1 },
-                                 { -1, -1, -1 }};
+        private int[,] _board = pristineBoard();
 
         public int[,] Board
         {
@@ -29,6 +27,20 @@ namespace tts_server
                 _board[row, col] = who;
             else
                 throw new InvalidMoveException(row, col);
+        }
+
+        public void resetGame()
+        {
+            Finished = false;
+            _board = pristineBoard();
+        }
+
+        static public int[,] pristineBoard()
+        {
+            int[,] board = {{ -1, -1, -1 },
+                            { -1, -1, -1 },
+                            { -1, -1, -1 }};
+            return board;
         }
 
         // This function returns true if there are moves

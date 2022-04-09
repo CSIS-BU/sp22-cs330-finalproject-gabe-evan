@@ -4,6 +4,9 @@
       <div class="columns">
         <div class="column is-three-fifths is-offset-one-fifth">
           <div class="box game">
+            <div *ngIf="gameFinished" class="overlay">
+              <button class="button is-large" (click)="tellReplay()">Play again?</button>
+            </div>
             <div class="board">
               <div class="square top left" (click)="placeTic(0,0)">
                 <object *ngIf="board[0][0] == 0" class="x" data="assets/x.svg" type="image/svg+xml"></object>

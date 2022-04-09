@@ -381,3 +381,16 @@ body:not(.mobile) .scores:active .swap {
     top: 320px
   }
 }
+
+.overlay{
+  background: rgba(10,10,10,.86);
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
