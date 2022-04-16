@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 
+// Used a lot of code from https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/
 namespace tts_server
 {
     class Game
