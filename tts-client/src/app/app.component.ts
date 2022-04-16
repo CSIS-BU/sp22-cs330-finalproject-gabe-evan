@@ -9,7 +9,7 @@ import {Message} from "./message";
 })
 export class AppComponent implements OnInit {
   board = new Array(3).fill(new Array(3).fill(-1));
-  messages = [];
+  gameFinished = false;
   constructor(private ttsService: TtsService) {
   }
 
@@ -25,15 +25,27 @@ export class AppComponent implements OnInit {
     this.board = msg.board;
 
     if(!msg.error){
-      // ...
+      if(msg.finished){
+        this.askToReplay();
+      }
     }else{
-      // ... show error to user ...
+      if(msg.finished){
+        this.askToReplay();
+      }
     }
+  }
+
+  askToReplay(){
+    this.gameFinished = true;
+  }
+
+  tellReplay(){
+    this.ttsService.send({row: -1, col: -1});
+    this.gameFinished = false;
   }
 
   ngOnInit() {
     this.ttsService.connect();
-
     this.ttsService.incoming.subscribe((msg: any) => this.handleMessage(msg));
   }
 }
