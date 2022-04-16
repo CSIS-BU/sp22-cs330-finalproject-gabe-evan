@@ -70,9 +70,9 @@ namespace tts_server
                 if (_board[row, 0] == _board[row, 1] &&
                     _board[row, 1] == _board[row, 2])
                 {
-                    if (_board[row, 0] == player)
+                    if (_board[row, 0] == opponent)
                         return +10;
-                    else if (_board[row, 0] == opponent)
+                    else if (_board[row, 0] == player)
                         return -10;
                 }
             }
@@ -83,10 +83,10 @@ namespace tts_server
                 if (_board[0, col] == _board[1, col] &&
                     _board[1, col] == _board[2, col])
                 {
-                    if (_board[0, col] == player)
+                    if (_board[0, col] == opponent)
                         return +10;
 
-                    else if (_board[0, col] == opponent)
+                    else if (_board[0, col] == player)
                         return -10;
                 }
             }
@@ -94,17 +94,17 @@ namespace tts_server
             // Checking for Diagonals for X or O victory.
             if (_board[0, 0] == _board[1, 1] && _board[1, 1] == _board[2, 2])
             {
-                if (_board[0, 0] == player)
+                if (_board[0, 0] == opponent)
                     return +10;
-                else if (_board[0, 0] == opponent)
+                else if (_board[0, 0] == player)
                     return -10;
             }
 
             if (_board[0, 2] == _board[1, 1] && _board[1, 1] == _board[2, 0])
             {
-                if (_board[0, 2] == player)
+                if (_board[0, 2] == opponent)
                     return +10;
-                else if (_board[0, 2] == opponent)
+                else if (_board[0, 2] == player)
                     return -10;
             }
 
@@ -148,7 +148,7 @@ namespace tts_server
                         if (_board[i, j] == -1)
                         {
                             // Make the move
-                            _board[i, j] = player;
+                            _board[i, j] = opponent;
 
                             // Call minimax recursively and choose
                             // the maximum value
@@ -176,7 +176,7 @@ namespace tts_server
                         if (_board[i, j] == -1)
                         {
                             // Make the move
-                            _board[i, j] = opponent;
+                            _board[i, j] = player;
 
                             // Call minimax recursively and choose
                             // the minimum value
@@ -211,7 +211,7 @@ namespace tts_server
                     if (_board[i, j] == -1)
                     {
                         // Make the move
-                        _board[i, j] = player;
+                        _board[i, j] = opponent;
 
                         // compute evaluation function for this
                         // move.

@@ -212,6 +212,7 @@ namespace tts_server
                         if (game.checkWinner(Game.opponent))
                         {
                             game.Finished = true;
+                            res.finished = true;
                             res.won = playerWon;
                             res.message = "You lost";
                         }
@@ -270,7 +271,5 @@ namespace tts_server
             public bool finished = false;
             public int[,] board;
         }
-
-        
     }
 }
