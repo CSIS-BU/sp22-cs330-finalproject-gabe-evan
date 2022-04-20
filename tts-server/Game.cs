@@ -76,7 +76,7 @@ namespace tts_server
                     if (_board[row, 0] == opponent)
                         return +10;
                     else if (_board[row, 0] == player)
-                        return -10;
+                        return -9;
                 }
             }
 
@@ -94,6 +94,8 @@ namespace tts_server
                 }
             }
 
+            //I found out, after a large amount of inefficient testing, that decreasing the player values (in this case, horizontal wins and left diagonals)
+
             // Checking for Diagonals for X or O victory.
             if (_board[0, 0] == _board[1, 1] && _board[1, 1] == _board[2, 2])
             {
@@ -108,7 +110,7 @@ namespace tts_server
                 if (_board[0, 2] == opponent)
                     return +10;
                 else if (_board[0, 2] == player)
-                    return -10;
+                    return -9;
             }
 
             // Else if none of them have won then return 0
