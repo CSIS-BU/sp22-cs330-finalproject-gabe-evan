@@ -192,14 +192,22 @@ namespace tts_server
                     if (res.finished && (playerWon || opponentWon)) 
                     {
                         game.Finished = true;
-                        game.wins++;
                         res.won = playerWon;
+                        if (res.won)
+                        {
+                            game.wins++;
+                        }
+                        else
+                        {
+                            game.wins--;
+                        }
                         res.message = "You " + (playerWon ? "won" : "lost");
                     }
                     else if (res.finished)
                     {
                         game.Finished = true;
                         res.won = false;
+                        game.ties++;
                         res.message = "There was a tie";
                     }else
                     {
@@ -262,6 +270,10 @@ namespace tts_server
             }
 
             res.board = game.Board;
+
+            res.ties = game.ties;
+            res.wins = game.wins;
+            res.losses = game.losses;
             
             return JsonConvert.SerializeObject(res);
         }
@@ -269,9 +281,9 @@ namespace tts_server
         private class Response
         {
             public bool error = false;
-            public int wins;
-            public int losses;
-            public int ties;
+            public int wins = 0;
+            public int losses = 0;
+            public int ties = 0;
             public string message;
             public bool won = false;
             public bool finished = false;

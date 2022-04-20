@@ -4,4 +4,7 @@ export interface Message {
   finished: boolean;
   message: string;
   won: boolean;
+  wins: number;
+  losses: number;
+  ties: number;
 }

@@ -14,7 +14,7 @@ namespace tts_server
 
         private int[,] _board = pristineBoard();
 
-        public int wins,losses,ties;
+        public int wins,losses,ties = 0;
 
         public int[,] Board
         {

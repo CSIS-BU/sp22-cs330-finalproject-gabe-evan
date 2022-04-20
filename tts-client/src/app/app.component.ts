@@ -10,6 +10,11 @@ import {Message} from "./message";
 export class AppComponent implements OnInit {
   board = new Array(3).fill(new Array(3).fill(-1));
   gameFinished = false;
+
+  wins = 0;
+  losses = 0;
+  ties = 0;
+
   constructor(private ttsService: TtsService) {
   }
 
@@ -23,6 +28,10 @@ export class AppComponent implements OnInit {
     console.log(msg);
 
     this.board = msg.board;
+
+    this.wins = msg.wins;
+    this.ties = msg.ties;
+    this.losses = msg.losses;
 
     if(!msg.error){
       if(msg.finished){
