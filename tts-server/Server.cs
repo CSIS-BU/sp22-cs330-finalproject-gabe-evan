@@ -192,6 +192,7 @@ namespace tts_server
                     if (res.finished && (playerWon || opponentWon)) 
                     {
                         game.Finished = true;
+                        game.wins++;
                         res.won = playerWon;
                         res.message = "You " + (playerWon ? "won" : "lost");
                     }
@@ -212,6 +213,7 @@ namespace tts_server
                         if (game.checkWinner(Game.opponent))
                         {
                             game.Finished = true;
+                            game.losses++;
                             res.finished = true;
                             res.won = playerWon;
                             res.message = "You lost";
@@ -219,6 +221,7 @@ namespace tts_server
                         else if (!game.isMovesLeft())
                         {
                             game.Finished = true;
+                            game.ties++;
                             res.won = false;
                             res.message = "There was a tie";
                         }
@@ -266,6 +269,9 @@ namespace tts_server
         private class Response
         {
             public bool error = false;
+            public int wins;
+            public int losses;
+            public int ties;
             public string message;
             public bool won = false;
             public bool finished = false;
