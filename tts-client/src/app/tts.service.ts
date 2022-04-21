@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {Subject} from "rxjs";
 import {environment} from "../environments/environment";
 
@@ -25,6 +25,15 @@ export class TtsService {
   get socket(): (WebSocket | undefined) {
     return this._socket;
   }
+
+  private  _connection: boolean = true;
+
+  get connection(): boolean {
+    return this._connection;
+  }
+
+  @Output()
+  connected = new EventEmitter<boolean>();
 
   /**
    * Start the websocket connection
@@ -72,6 +81,7 @@ export class TtsService {
 
   private onOpen = (event: Event): void => {
     console.log('websocket opened', event);
+    this.connectedEmit(true);
     const buffered = this.buffer;
     if (!buffered) {
       return;
@@ -87,10 +97,15 @@ export class TtsService {
   };
 
   private onClose = (event: CloseEvent): void => {
+    this.connectedEmit(false);
     console.info('websocket closed', event);
   };
 
   ngOnDestroy() {
     this.disconnect();
+  }
+
+  connectedEmit(status: boolean) {
+    this.connected.emit(status);
   }
 }

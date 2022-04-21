@@ -1,13 +1,14 @@
-<section class="hero is-primary is-fullheight">
+<section class="hero has-background-light is-fullheight">
   <div class="hero-body">
     <div class="container">
-      <div class="columns">
-        <div class="column is-three-fifths is-offset-one-fifth">
+      <div class="columns is-flex-direction-column">
+        <div class="column">
           <div class="box game">
-            <div *ngIf="gameFinished" class="overlay">
-              <button class="button is-large" (click)="tellReplay()">Play again?</button>
-            </div>
-            <div class="board">
+            <div class="board is-relative">
+              <div *ngIf="gameFinished" class="overlay is-flex-direction-column">
+                <p class="is-centered is-centered is-size-2 mb-5 has-text-white">{{message}}</p>
+                <button class="button is-large" (click)="tellReplay()">Play again?</button>
+              </div>
               <div class="square top left" (click)="placeTic(0,0)">
                 <object *ngIf="board[0][0] == 0" class="x" data="assets/x.svg" type="image/svg+xml"></object>
                 <object *ngIf="board[0][0] == 1" class="o" data="assets/o.svg" type="image/svg+xml"></object>
@@ -46,10 +47,17 @@
               </div>
             </div>
           </div>
-          <div class="box scores is-flex is-justify-content-space-around">
-            <span class="tag is-success is-large">{{wins}} won</span>
-            <span class="tag is-warning is-large">{{ties}} tied</span>
-            <span class="tag is-danger is-large">{{losses}} lost</span>
+        </div>
+        <div class="column">
+          <div class="box container mb-0">
+            <div class="column is-fullwidth is-flex is-justify-content-space-around">
+              <span class="tag is-success is-large">{{wins}} won</span>
+              <span class="tag is-warning is-large">{{ties}} tied</span>
+              <span class="tag is-danger is-large">{{losses}} lost</span>
+            </div>
+          </div>
+          <div class="column is-fullwidth is-flex is-justify-content-space-around">
+            <span class="tag is-rounded" [ngClass]="connected ? 'is-success' : 'is-danger'">{{connected ? 'Connected' : 'Disconnected'}}</span>
           </div>
         </div>
       </div>

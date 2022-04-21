@@ -15,6 +15,10 @@ export class AppComponent implements OnInit {
   losses = 0;
   ties = 0;
 
+  message = "";
+
+  connected = true;
+
   constructor(private ttsService: TtsService) {
   }
 
@@ -32,6 +36,8 @@ export class AppComponent implements OnInit {
     this.wins = msg.wins;
     this.ties = msg.ties;
     this.losses = msg.losses;
+
+    this.message = msg.message;
 
     if(!msg.error){
       if(msg.finished){
@@ -56,5 +62,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.ttsService.connect();
     this.ttsService.incoming.subscribe((msg: any) => this.handleMessage(msg));
+    this.ttsService.connected.subscribe((status: boolean) => {
+      this.connected = status;
+    });
   }
 }
