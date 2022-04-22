@@ -52,7 +52,9 @@ export class TtsService {
    */
   disconnect(): void {
     if (!this._socket) {
-      throw new Error('websocket not connected');
+      //throw new Error('websocket not connected');
+      console.error('WebSocket not connected.');
+      return;
     }
     this._socket.removeEventListener('message', this.onMessage);
     this._socket.removeEventListener('open', this.onOpen);
