@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 // Used a lot of code from https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-3-tic-tac-toe-ai-finding-optimal-move/
 namespace tts_server
@@ -23,6 +24,14 @@ namespace tts_server
 
         public bool Finished
         { get; set; }
+
+        private static bool RandomStumble(double chance = 0.5)
+        {
+            double rd = new Random().NextDouble();
+            bool stumble = rd <= chance;
+            Console.WriteLine("The AI {0} make a stumble move.", (stumble ? "did" : "did not"));
+            return stumble;
+        }
 
         public void placeTic(int who, int row, int col)
         {
@@ -65,7 +74,7 @@ namespace tts_server
 
         // This is the evaluation function as discussed
         // in the previous article ( http://goo.gl/sJgv68 )
-        private int evaluate()
+        private int evaluate(bool randomStumble)
         {
             // Checking for Rows for X or O victory.
             for (int row = 0; row < 3; row++)
@@ -76,7 +85,7 @@ namespace tts_server
                     if (_board[row, 0] == opponent)
                         return +10;
                     else if (_board[row, 0] == player)
-                        return -9;
+                        return -10;
                 }
             }
 
@@ -110,7 +119,7 @@ namespace tts_server
                 if (_board[0, 2] == opponent)
                     return +10;
                 else if (_board[0, 2] == player)
-                    return -9;
+                    return -10;
             }
 
             // Else if none of them have won then return 0
@@ -120,9 +129,9 @@ namespace tts_server
         // This is the minimax function. It considers all
         // the possible ways the game can go and returns
         // the value of the board
-        private int minimax(int depth, bool isMax)
+        private int minimax(int depth, bool isMax, bool randomStumble = false)
         {
-            int score = evaluate();
+            int score = evaluate(randomStumble);
 
             // If Maximizer has won the game
             // return his/her evaluated score
@@ -205,6 +214,12 @@ namespace tts_server
             bestMove.row = -1;
             bestMove.col = -1;
 
+            bool randomStumble = RandomStumble(.25);
+
+            // Select a random cell if AI stumbles
+            if (randomStumble)
+                return RandomMove();
+
             // Traverse all cells, evaluate minimax function
             // for all empty cells. And return the cell
             // with optimal value.
@@ -220,7 +235,7 @@ namespace tts_server
 
                         // compute evaluation function for this
                         // move.
-                        int moveVal = minimax(0, false);
+                        int moveVal = minimax(0, false, randomStumble);
 
                         // Undo the move
                         _board[i, j] = -1;
@@ -239,6 +254,22 @@ namespace tts_server
             }
 
             return bestMove;
+        }
+
+        private Move RandomMove()
+        {
+            List<Move> randCells = new List<Move>();
+
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    if (_board[i, j] == -1) {
+                        Move move = new Move();
+                        move.row = i;
+                        move.col = j;
+                        randCells.Add(move);
+                    }
+
+            return randCells[new Random().Next(0, randCells.Count)];
         }
 
         public bool checkWinner(int player)
