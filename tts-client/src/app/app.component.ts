@@ -20,8 +20,8 @@ export class AppComponent implements OnInit {
 
   connected = true;
 
-  x = `${environment.assets}/x.svg`;
-  o = `${environment.assets}/o.svg`;
+  x = 'x.svg';
+  o = 'o.svg';
 
   constructor(private ttsService: TtsService) {
   }

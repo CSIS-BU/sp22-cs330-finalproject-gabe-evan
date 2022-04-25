@@ -17,8 +17,9 @@ namespace tts_server
 
         public static void Main()
         {
-            //string ip = "0.0.0.0";
-            string ip = "127.0.0.1";
+            // I don't recommend running this (0.0.0.0) in anything other than a container...
+            string ip = "0.0.0.0";
+            //string ip = "127.0.0.1";
             int port = 5005;
             var server = new TcpListener(IPAddress.Parse(ip), port);
 

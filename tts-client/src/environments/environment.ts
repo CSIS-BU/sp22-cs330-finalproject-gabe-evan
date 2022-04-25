@@ -5,7 +5,6 @@
 export const environment = {
   production: false,
   server: 'ws://localhost:5005',
-  assets: 'assets'
 };
 
 /*
