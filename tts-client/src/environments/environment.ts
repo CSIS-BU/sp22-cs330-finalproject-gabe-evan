@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  server: 'ws://127.0.0.1:80'
+  server: 'ws://tic-tac-socket-server.herokuapp.com:80',
+  assets: 'assets'
 };
 
 /*

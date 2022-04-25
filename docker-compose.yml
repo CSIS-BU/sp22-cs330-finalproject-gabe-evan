@@ -1,0 +1,18 @@
+version: '3.7'
+services: 
+    tts-server:
+        container_name: tts-server
+        build: 
+            context: ./tts-server
+            dockerfile: Dockerfile
+        ports: 
+          - "80:80"
+    tts-client:
+        container_name: tts-client
+        build: 
+            context: ./tts-client
+            dockerfile: Dockerfile
+        ports: 
+          - "80:80"
+        depends_on: 
+          - tts-server

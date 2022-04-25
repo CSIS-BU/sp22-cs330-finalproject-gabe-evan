@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -16,7 +17,12 @@ namespace tts_server
 
         public static void Main()
         {
-            string ip = "127.0.0.1";
+            /*string ip = Dns.GetHostEntry(Dns.GetHostName())
+               .AddressList
+               .First(x => x.AddressFamily == AddressFamily.InterNetwork)
+               .ToString();*/
+
+            string ip = "0.0.0.0";
             int port = 80;
             var server = new TcpListener(IPAddress.Parse(ip), port);
 

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {TtsService} from "./tts.service";
 import {Message} from "./message";
+import {environment} from "../environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,9 @@ export class AppComponent implements OnInit {
   message = "";
 
   connected = true;
+
+  x = `${environment.assets}/x.svg`;
+  o = `${environment.assets}/o.svg`;
 
   constructor(private ttsService: TtsService) {
   }
