@@ -17,13 +17,9 @@ namespace tts_server
 
         public static void Main()
         {
-            /*string ip = Dns.GetHostEntry(Dns.GetHostName())
-               .AddressList
-               .First(x => x.AddressFamily == AddressFamily.InterNetwork)
-               .ToString();*/
-
-            string ip = "0.0.0.0";
-            int port = 80;
+            //string ip = "0.0.0.0";
+            string ip = "127.0.0.1";
+            int port = 5005;
             var server = new TcpListener(IPAddress.Parse(ip), port);
 
             server.Start();

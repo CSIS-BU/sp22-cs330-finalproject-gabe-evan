@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/1cc0d40c-6284-4681-8550-e810635f25a9/resourceGroups/tts/providers/Microsoft.Web/sites/tts-server",
+    "appService.deploySubpath": "tts-server\\out"
+}
