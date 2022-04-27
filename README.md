@@ -1,6 +1,8 @@
 # CS 330: Final Project
 ## Tic-tac-toe
 
+[Presentation Video](https://drive.google.com/file/d/1-C0iTOGT0y2SMfbJ3VavWnMnXKFA6Se4/view?usp=sharing)
+
 Human vs AI
 - Session-based gameplay
 - AI is made to stumble to improve gameplay
